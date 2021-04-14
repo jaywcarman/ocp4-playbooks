@@ -1,0 +1,4 @@
+---
+# defaults file for powervs-bastion-as-router
+router_interface: env3
+private_network_mtu: 1450

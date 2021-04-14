@@ -1,0 +1,33 @@
+---
+# tasks file for powervs-bastion-as-router
+- name: Enable IP masquerade in public firewalld zone
+  firewalld:
+    masquerade: yes
+    state: enabled
+    permanent: yes
+    zone: public
+
+- name: Reload firewalld service
+  service:
+    name: firewalld
+    state: reloaded
+
+- name: Set dhcpd routers values to bastion ip
+  lineinfile:
+    path: /etc/dhcp/dhcpd.conf
+    regex: "option routers"
+    line: "    option routers                  {{ router_ipv4_address }};"
+  vars:
+    router_ipv4_address: "{{ lookup('vars', 'ansible_' + router_interface).ipv4.address }}"
+
+- name: Set dhcpd interface mtu value
+  lineinfile:
+    path: /etc/dhcp/dhcpd.conf
+    regex: "option interface-mtu"
+    line: "    option interface-mtu            {{ private_network_mtu }};"
+    insertafter: "option domain-search"
+
+- name: Restart dhcpd service
+  service:
+    name: dhcpd
+    state: restarted
