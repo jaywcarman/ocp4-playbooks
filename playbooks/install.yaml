@@ -5,6 +5,7 @@
   hosts: bastion
   roles:
   - ocp-config
+  - powervs-bastion-as-router
   vars:
     master_count: "{{ groups['masters'] | length }}"
     worker_count: "{{ groups['workers'] | default([]) | length }}"
