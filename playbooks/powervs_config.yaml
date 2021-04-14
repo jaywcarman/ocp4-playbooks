@@ -3,4 +3,5 @@
   hosts: bastion
   roles:
   - powervs-nodes-config
+  - powervs-bastion-as-router
 
